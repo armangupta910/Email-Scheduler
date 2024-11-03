@@ -11,17 +11,11 @@ public class ScheduleEmailRequest {
     @NotEmpty
     private String email;
 
-    @NotEmpty
-    private String subject;
-
-    @NotEmpty
-    private String body;
-
     @NotNull
     private LocalDateTime dateTime;
 
     @NotNull
-    private ZoneId timeZone;
+    private String salutation;
 
     public String getEmail() {
         return email;
@@ -29,22 +23,6 @@ public class ScheduleEmailRequest {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     public LocalDateTime getDateTime() {
@@ -55,11 +33,24 @@ public class ScheduleEmailRequest {
         this.dateTime = dateTime;
     }
 
-    public ZoneId getTimeZone() {
-        return timeZone;
+    public String getSalutation() {
+        return salutation;
     }
 
-    public void setTimeZone(ZoneId timeZone) {
-        this.timeZone = timeZone;
+    public void setSalutation(String salutation) {
+        this.salutation = salutation;
     }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    @NotNull
+    private String company;
+
+   
 }
