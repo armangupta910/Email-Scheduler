@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Add a style for the image to adjust size and margins */
+        .header-image, .button-image {
+            display: block;
+            margin: 0rem auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input, textarea, select {
+            width: 80%; /* Adjust width for centering */
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-section label {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .upload-section .btn {
+            margin-top: 1rem;
+        }
+
+        .file-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 16px;
+        }
+
+        .file-name {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .cancel-upload {
+            cursor: pointer;
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Email Scheduler</h1>
+</header>
+
+<h2>This is how the sent email will look like</h2>
+<!-- Image after the main title -->
+<img src="mail1.png" alt="Header Image" class="header-image">
+<img src="mail2.png" alt="Header Image" class="header-image">
+<img src="mail3.png" alt="Header Image" class="header-image">
+
+<div class="container">
+    <h2>Schedule a Single Email</h2>
+    <form id="singleEmailForm">
+        <div class="form-group">
+            <label for="company">Company Name</label>
+            <input type="text" id="company" name="company" placeholder="Enter company name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient">Recipient Email</label>
+            <input type="email" id="recipient" name="email" placeholder="Enter recipient email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="datetime">Date and Time</label>
+            <input type="datetime-local" id="datetime" name="dateTime" required>
+        </div>
+
+        <div class="form-group">
+            <label for="salutation">Salutation</label>
+            <input type="text" id="salutation" name="salutation" placeholder="Enter salutation" required>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="designation">Your Designation</label>
+            <input type="text" id="designation" name="designation" placeholder="Enter your designation" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Your Phone Number</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+        </div>
+
+        <button type="submit" class="btn">Schedule Email</button>
+    </form>
+</div>
+
+<!-- New Section to Upload Excel Sheet -->
+<div class="container">
+    <h2>Schedule Bulk Emails via Excel</h2>
+    <h3>Your Excel file should be in this format</h3>
+    <img src="sample.png" alt="Header Image" class="header-image">
+    <div class="upload-section">
+        <label for="excelUpload">Choose Excel File</label>
+        <input type="file" id="excelUpload" accept=".xlsx,.xls">
+        <button id="uploadBtn" class="btn">Upload and Schedule Emails</button>
+    </div>
+
+    <!-- Display the uploaded file name with cancel option -->
+    <div class="file-info" id="fileInfo" style="display: none;">
+        <span class="file-name" id="fileName"></span>
+        <span class="cancel-upload" id="cancelUpload">×</span>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('singleEmailForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        // Collect form data
+        const company = document.getElementById('company').value;
+        const email = document.getElementById('recipient').value;
+        const dateTime = document.getElementById('datetime').value;
+        const salutation = document.getElementById('salutation').value;
+        const name = document.getElementById('name').value;
+        const designation = document.getElementById('designation').value;
+        const phone = document.getElementById('phone').value;
+
+        // Create JSON object
+        const emailData = {
+            company,
+            email,
+            dateTime,
+            salutation,
+            name,
+            designation,
+            phone,
+        };
+
+        console.log('Payload:', emailData);
+
+        // Send to backend
+        try {
+            const response = await fetch('/scheduleEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData),
+            });
+
+            if (response.ok) {
+                alert('Email scheduled successfully!');
+            } else {
+                const errorDetails = await response.json();
+                console.error('Error details:', errorDetails);
+                alert('Failed to schedule email. Please check the input and try again.');
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+            alert('An error occurred while scheduling the email.');
+        }
+    });
+
+    // Display the file name and cancel option as soon as the file is selected
+    document.getElementById('excelUpload').addEventListener('change', function() {
+        const fileInput = document.getElementById('excelUpload');
+        const file = fileInput.files[0];
+
+        if (file) {
+            // Display the file name with cancel option
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileInfo').style.display = 'flex';  // Show the file info section
+        }
+    });
+
+    // Handle file upload when the submit button is clicked
+    document.getElementById('uploadBtn').addEventListener('click', async function() {
+        const fileInput = document.getElementById('excelUpload');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Please select an Excel file to upload.');
+            return;
+        }
+
+        // Create a FormData object
+        const formData = new FormData();
+        formData.append('file', file);  // Append the file to FormData
+
+        try {
+            const response = await fetch('/scheduleEmailsFromExcel', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('Emails scheduled successfully from Excel!');
+            } else {
+                const errorDetails = await response.json();
+                console.error('Error details:', errorDetails);
+                alert('Failed to schedule emails from the Excel file. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+            alert('An error occurred while processing the file.');
+        }
+    });
+
+    // Cancel the file selection
+    document.getElementById('cancelUpload').addEventListener('click', function() {
+        document.getElementById('excelUpload').value = '';  // Clear the file input
+        document.getElementById('fileInfo').style.display = 'none';  // Hide the file info
+    });
+
+</script>
+
+</body>
+</html>
