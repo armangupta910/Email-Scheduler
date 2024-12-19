@@ -13,7 +13,7 @@
 **1. Clone the application**
 
 ```bash
-git clone https://github.com/armangupta910/Email-Scheduler-with-Frontend.git
+git clone https://github.com/armangupta910/Email-Scheduler.git
 ```
 
 **2. Create MySQL database**
@@ -38,18 +38,10 @@ spring.mail.username=your_email
 spring.mail.password=your_password
 ```
 
-If you're using Gmail, you need to allow the third party apps to send emails by following the instructions below -
-
-+ Go to https://myaccount.google.com/security?pli=1#connectedapps
-+ Set ‘Allow less secure apps’ to YES
-
 **5. Create Quartz Tables**
 
 The project stores all the scheduled Jobs in MySQL database. You'll need to create the tables that Quartz uses to store Jobs and other job-related data. Please create Quartz specific tables by executing the `quartz_tables.sql` script located inside `src/main/resources` directory.
 
-```bash
-mysql> source <PATH_TO_QUARTZ_TABLES.sql>
-```
 
 **6. Build and run the app using maven**
 
